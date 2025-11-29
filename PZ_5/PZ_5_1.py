@@ -1,11 +1,12 @@
 "Составить функцию, которая напечатает сорок любых символов."
 
+import random
+
 def print_forty_chars():
     symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()"
     result = ""
-    for i in range(40):
-        index = i % len(symbols)  
-        result += symbols[index]
+    for _ in range(40):
+        result += random.choice(symbols)
     print(result)
 
 try:
