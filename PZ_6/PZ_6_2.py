@@ -11,4 +11,4 @@ try:
         for j in range(n):
             if a[i] == a[j]:
         if count > max_count:
-               bre
+        
