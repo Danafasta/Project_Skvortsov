@@ -11,7 +11,7 @@ try:
     else:
         a = []
         for i in range(N):
-            a.append(random.randint(-50, 50))
+            a.append(random.randint(0, 100))
         print("Список:", a)
         s = 0
         for i in range(K - 1, L):

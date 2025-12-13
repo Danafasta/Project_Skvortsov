@@ -3,6 +3,7 @@
 try:
     num = int(input("Введите целое положительное число: "))
     if num > 0:
-        print(",".join(str(num)))
+        for i in str(num):
+            print(i)
 except:
     print("Ошибка")
