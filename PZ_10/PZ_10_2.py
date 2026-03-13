@@ -18,4 +18,5 @@ f1 = open("new_text.txt", "w", encoding="UTF-8")
 f1.write(longest_line)
 f1.close()
 
-print(f"Самая длинная строка записана в new_text.txt")
+
+print("Самая длинная строка записана в new_text.txt")
