@@ -6,7 +6,7 @@ import random
 rows = 5
 cols = 5
 
-matrix = [[random.randint(-10, 10) for _ in range(cols)] for _ in range(rows)]
+matrix = [[random.randint(-10, 10) for i in range(cols)] for i in range(rows)]
 
 print("Исходная матрица:")
 for row in matrix:
