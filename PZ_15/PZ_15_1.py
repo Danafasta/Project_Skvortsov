@@ -1,11 +1,9 @@
-# Приложение НОТАРИАЛЬНАЯ КОНТОРА для некоторой организации. 
-#БД должна содержать таблицу Нотариальные услуги со следующей структурой записи: ФИО клиента, услуга, сумма сделки, комиссионные(доход конторы).
+# Приложение НОТАРИАЛЬНАЯ КОНТОРА для некоторой организации.
+#БД должна содержать таблицу Нотариальные услуги со следующей структурой записи: ФИО клиента, услуга, сумма сделки, комиссионные(доход конторы). Программа должна обеспечивать функционал по вводу данных в БД(10 позиций), их поиску, удалению и редактированию. При организации поиска, удалении и редактировании использовать условие, предусмотреть по три SQL-запроса для каждой операции.
 import sqlite3 as sq
 
-DB_NAME = "notary.db"
-
 def init_db():
-    with sq.connect(DB_NAME) as con:
+    with sq.connect("notary.db") as con:
         cur = con.cursor()
         cur.execute("DROP TABLE IF EXISTS notary_services")
         cur.execute("""CREATE TABLE IF NOT EXISTS notary_services(
@@ -29,39 +27,43 @@ def insert_data():
         ("Федорова Ф.Ф.", "Договор купли-продажи", 180000.0, 6000.0),
         ("Алексеева А.А.", "Доверенность", 1100.0, 220.0)
     ]
-    with sq.connect(DB_NAME) as con:
+    with sq.connect("notary.db") as con:
         cur = con.cursor()
+        cur.execute("DELETE FROM notary_services")
         cur.executemany("INSERT INTO notary_services(client_fio, service, deal_sum, commission) VALUES (?, ?, ?, ?)", records)
+        print("Данные успешно добавлены.")
 
 def search_db():
-    with sq.connect(DB_NAME) as con:
+    with sq.connect("notary.db") as con:
         cur = con.cursor()
         cur.execute("SELECT * FROM notary_services WHERE client_fio LIKE 'Иванов%'")
-        print(list(map(lambda x: x, cur.fetchall())))
+        print(list(map(lambda x: "ID:" + str(x[0]) + " | " + x[1] + " | " + x[2] + " | " + str(x[3]) + " | " + str(x[4]), cur.fetchall())))
         cur.execute("SELECT * FROM notary_services WHERE service = 'Доверенность'")
-        print(list(map(lambda x: x, cur.fetchall())))
+        print(list(map(lambda x: "ID:" + str(x[0]) + " | " + x[1] + " | " + x[2] + " | " + str(x[3]) + " | " + str(x[4]), cur.fetchall())))
         cur.execute("SELECT * FROM notary_services WHERE deal_sum BETWEEN 100000 AND 250000")
-        print(list(map(lambda x: x, cur.fetchall())))
+        print(list(map(lambda x: "ID:" + str(x[0]) + " | " + x[1] + " | " + x[2] + " | " + str(x[3]) + " | " + str(x[4]), cur.fetchall())))
 
 def delete_db():
-    with sq.connect(DB_NAME) as con:
+    with sq.connect("notary.db") as con:
         cur = con.cursor()
         cur.execute("DELETE FROM notary_services WHERE id = 3")
         cur.execute("DELETE FROM notary_services WHERE commission < 1000")
         cur.execute("DELETE FROM notary_services WHERE service = 'Договор дарения'")
+        print("Удаление выполнено.")
 
 def edit_db():
-    with sq.connect(DB_NAME) as con:
+    with sq.connect("notary.db") as con:
         cur = con.cursor()
         cur.execute("UPDATE notary_services SET commission = commission * 1.2 WHERE deal_sum > 200000")
         cur.execute("UPDATE notary_services SET service = 'Генеральная доверенность' WHERE service LIKE '%Доверенность%'")
         cur.execute("UPDATE notary_services SET deal_sum = deal_sum + 5000 WHERE client_fio LIKE 'Петров%'")
+        print("Редактирование выполнено.")
 
 def show_all():
-    with sq.connect(DB_NAME) as con:
+    with sq.connect("notary.db") as con:
         cur = con.cursor()
         cur.execute("SELECT * FROM notary_services")
-        print(list(map(lambda r: (r[1], r[2], r[3], r[4]), cur.fetchall())))
+        print(list(map(lambda r: "ID:" + str(r[0]) + " | " + r[1] + " | " + r[2] + " | " + str(r[3]) + " | " + str(r[4]), cur.fetchall())))
 
 def main():
     init_db()
@@ -79,9 +81,12 @@ def main():
         elif choice == "4": edit_db()
         elif choice == "5": show_all()
         elif choice == "0": break
+        else: print("Неверный выбор.")
 
 if __name__ == "__main__":
     try:
         main()
     except sq.Error as e:
-        print(f"Ошибка БД: {e}")
+        print("Ошибка БД: " + str(e))
+    except Exception as e:
+        print("Ошибка: " + str(e))
