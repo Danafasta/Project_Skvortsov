@@ -9,17 +9,18 @@ def solve(event):
         label_res.config(text="Ошибка! Введите целое положительное число.")
 
 root = Tk()
-root.geometry("300x200")
+root.title("Вывод цифр")
+root.geometry("420x200")
 
-Label(root, text="Введите число:").pack(pady=20)
-entry = Entry(root, width=20)
+Label(root, text="Введите число:").pack(pady=15)
+entry = Entry(root, width=25)
 entry.pack()
 
 btn = Button(root, text="Вывести цифры", width=20)
-btn.pack(pady=20)
+btn.pack(pady=15)
 btn.bind("<Button-1>", solve)
 
-label_res = Label(root, text="", width=30)
+label_res = Label(root, text="")
 label_res.pack(pady=10)
 
 root.mainloop()
